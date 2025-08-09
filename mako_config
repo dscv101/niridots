@@ -1,0 +1,32 @@
+# Mako configuration for Muted Retro Space theme
+
+[global]
+font=Inter 11
+padding=10
+margin=10
+anchor=top-right
+width=320
+height=100
+max-history=10
+
+[urgency=low]
+background-color=#8E9B8CCC
+text-color=#F3EAD7
+border-color=#2E4A46
+border-size=2
+
+default-timeout=6000
+
+[urgency=normal]
+background-color=#8E9B8CCC
+text-color=#F3EAD7
+border-color=#2E4A46
+border-size=2
+default-timeout=6000
+
+[urgency=critical]
+background-color=#B77C6188
+text-color=#F3EAD7
+border-color=#B77C61
+border-size=2
+default-timeout=0

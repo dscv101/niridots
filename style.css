@@ -1,0 +1,49 @@
+/* Waybar style for Muted Retro Space theme */
+
+* {
+    border: none;
+    border-radius: 0;
+    font-family: "JetBrainsMono Nerd Font", "Inter", sans-serif;
+    font-size: 12px;
+    min-height: 0;
+    color: #F3EAD7;
+}
+
+#waybar {
+    background-color: rgba(142, 155, 140, 0.8);
+    border: 2px solid #2E4A46;
+    border-radius: 10px;
+    padding: 4px 8px;
+}
+
+#clock {
+    margin: 0 12px;
+}
+
+#battery.charging {
+    color: #E9B872;
+}
+
+#battery.warning {
+    color: #B77C61;
+}
+
+#workspaces button {
+    padding: 0 8px;
+    margin: 0 2px;
+    background: transparent;
+}
+
+#workspaces button.focused {
+    background-color: #2E4A46;
+    color: #E9B872;
+    border-radius: 8px;
+}
+
+#window {
+    margin-left: 8px;
+}
+
+#tray {
+    margin-left: 4px;
+}

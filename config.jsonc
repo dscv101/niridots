@@ -1,0 +1,46 @@
+{
+  // Waybar configuration for Muted Retro Space theme
+  "layer": "top",
+  "position": "top",
+  "modules-left": ["wlr/workspaces", "wlr/window"],
+  "modules-center": ["clock"],
+  "modules-right": [
+    "pulseaudio",
+    "network",
+    "cpu",
+    "memory",
+    "battery",
+    "tray"
+  ],
+  "wlr/workspaces": {
+    "format": "{icon}",
+    "on-click": "activate",
+    "persistent-workspaces": {
+      "1": "term",
+      "2": "web",
+      "3": "code",
+      "4": "chat",
+      "5": "files",
+      "6": "media"
+    }
+  },
+  "clock": {
+    "format": "{:%A, %B %d %Y %I:%M %p}"
+  },
+  "pulseaudio": {
+    "format": "{volume}% ",
+    "scroll-step": 5
+  },
+  "network": {
+    "format": "{ipaddr} "
+  },
+  "cpu": {
+    "format": "CPU {usage}%"
+  },
+  "memory": {
+    "format": "RAM {used:0.1f}G"
+  },
+  "battery": {
+    "format": "{capacity}% {icon}"
+  }
+}

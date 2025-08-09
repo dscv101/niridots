@@ -1,0 +1,33 @@
+/* Wofi style for Muted Retro Space theme */
+
+window {
+    background-color: rgba(142, 155, 140, 0.95);
+    border: 2px solid #2E4A46;
+    border-radius: 12px;
+    padding: 10px;
+    color: #F3EAD7;
+}
+
+#input {
+    margin-bottom: 10px;
+    padding: 6px 8px;
+    background-color: #9DAA8F;
+    border-radius: 6px;
+    color: #2E4A46;
+    border: none;
+}
+
+#entry {
+    padding: 6px;
+}
+
+#entry:selected {
+    background-color: #E9B872;
+    color: #2E4A46;
+    border-radius: 6px;
+}
+
+#scroll {
+    padding: 0;
+    margin: 0;
+}

@@ -1,0 +1,10 @@
+# Wofi configuration for Muted Retro Space theme
+show=drun
+term=foot
+prompt=
+allow_markup=true
+insensitive=true
+no-actions=true
+width=600
+height=400
+columns=1
