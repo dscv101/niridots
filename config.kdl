@@ -1,0 +1,252 @@
+// ~/.config/niri/config.kdl
+// Theme: Muted Retro Space — unified across Waybar, mako, wofi, Ghostty, GTK, icons, and cursor
+// Notes:
+// - Color keys now use underscores (e.g., deep_teal) for cleaner KDL identifiers.
+// - Autostart uses swww (init + animated transition).
+// - Cursor/theme aligners included; adjust to taste.
+
+// ----------------------------
+// Monitor outputs
+// ----------------------------
+output "HDMI-A-1" {
+  // Resolution and refresh rate (adjust as needed)
+  mode 1920x1080@60Hz
+
+  // Position this output at (0,0) — top-left of the layout
+  position 0 0
+
+  // Scale factor for HiDPI (1.0 = normal)
+  scale 1.0
+
+  // Rotate options: normal, left, right, flipped
+  transform normal
+
+  // Enable adaptive sync (if supported)
+  adaptive-sync true
+
+  // Background color as fallback before swww sets wallpaper
+  background colors.sage
+}
+
+// ----------------------------
+// Palette (Muted Retro Space)
+// ----------------------------
+colors {
+  sage         "#8E9B8C"
+  olive        "#9DAA8F"
+  slate        "#4A5E5A"
+  deep_teal    "#2E4A46"
+  cream        "#F3EAD7"
+  sand         "#E6D6A6"
+  peach        "#E9B872"
+  terra        "#B77C61"
+  star_yellow  "#E8D39E"
+  shadow       "#00000040"
+  shadow_strong "#00000066"
+}
+
+// ----------------------------
+// Core layout + aesthetics
+// ----------------------------
+layout {
+  gaps 10
+  column { default-width 1fr; min-width 420 }
+  new-window { direction right }
+}
+
+decoration {
+  border {
+    width 2
+    active-color colors.deep_teal
+    inactive-color colors.slate
+    urgent-color colors.terra
+  }
+  corner-radius 10
+  drop-shadow {
+    enabled true
+    radius 24
+    opacity 0.35
+    color colors.shadow
+  }
+  inactive-opacity 0.94
+}
+
+background {
+  // Soft backdrop that blends with the wallpaper edges
+  color colors.sage
+}
+
+// ----------------------------
+// Input
+// ----------------------------
+input {
+  kb-layout "us"
+  repeat-rate 45
+  repeat-delay 275
+
+  touchpad {
+    natural-scroll true
+    tap true
+    tap-button-map "lrm"
+    accel-profile "adaptive"
+    accel-speed 0.2
+  }
+
+  pointer {
+    accel-profile "flat"
+    accel-speed 0.0
+  }
+}
+
+// ----------------------------
+// Cursor (desktop-wide theme should still be set via gsettings)
+// ----------------------------
+cursor {
+  size 28
+  theme "MutedRetroSpace-Cursor" // you built this; falls back to system if missing
+}
+
+// ----------------------------
+// Animations (gentle, quick)
+// ----------------------------
+animations {
+  enabled true
+  window-open   { duration 140ms; curve "easeOutCubic" }
+  window-close  { duration 120ms; curve "easeInCubic" }
+  focus-change  { duration 80ms;  curve "easeOutCubic" }
+  workspace     { duration 160ms; curve "easeInOutCubic" }
+}
+
+// ----------------------------
+// Workspaces (named + optional accents)
+// ----------------------------
+workspaces {
+  names [
+    "1:term", "2:web", "3:code", "4:chat", "5:files",
+    "6:media", "7:db", "8:vm", "9:misc", "10:scratch"
+  ]
+
+  accent-colors {
+    "1:term"  colors.peach
+    "2:web"   colors.star_yellow
+    "3:code"  colors.terra
+    "4:chat"  colors.sand
+    "5:files" colors.olive
+    "6:media" colors.peach
+  }
+}
+
+// ----------------------------
+// Window rules (quality-of-life)
+// ----------------------------
+window-rules {
+  // Float common dialogs/utilities
+  rule { app-id /^pavucontrol$/; floating true; center true; width 900; height 640 }
+  rule { app-id /^org\.gnome\.Calculator$/; floating true; center true }
+  rule { app-id /^(zenity|yad|Nm-connection-editor)$/; floating true; center true }
+  rule { title /(Preferences|Settings|About)/; floating true; center true }
+  rule { app-id /^xdg-desktop-portal-gtk$/; floating true; center true }
+
+  // Visual hierarchy via borders
+  rule { app-id /(foot|alacritty|kitty)/; border { width 2 } }
+  rule { app-id /(code|cursor|clion|idea|com\.visualstudio\.code)/; border { width 3 } }
+}
+
+// ----------------------------
+// Keybinds (SUPER-centric; explicit bindings for 1–10)
+// ----------------------------
+binds {
+  mod "SUPER"
+
+  // Launchers
+  bind { key "Return"; action spawn "foot" }
+  bind { key "Space";  action spawn "wofi --show drun" }
+
+  // Focus movement
+  bind { key "H"; action focus left }
+  bind { key "J"; action focus down }
+  bind { key "K"; action focus up }
+  bind { key "L"; action focus right }
+
+  // Move windows
+  bind { mods ["SHIFT"]; key "H"; action move left }
+  bind { mods ["SHIFT"]; key "J"; action move down }
+  bind { mods ["SHIFT"]; key "K"; action move up }
+  bind { mods ["SHIFT"]; key "L"; action move right }
+
+  // Split / float / fullscreen
+  bind { key "V"; action split vertical }
+  bind { key "B"; action split horizontal }
+  bind { key "F"; action fullscreen toggle }
+  bind { key "T"; action floating toggle }
+
+  // Resize (fine)
+  bind { mods ["CTRL"]; key "H"; action resize left 40 }
+  bind { mods ["CTRL"]; key "J"; action resize down 40 }
+  bind { mods ["CTRL"]; key "K"; action resize up 40 }
+  bind { mods ["CTRL"]; key "L"; action resize right 40 }
+
+  // Workspaces 1–10 (switch)
+  bind { key "1";  action workspace switch "1:*" }
+  bind { key "2";  action workspace switch "2:*" }
+  bind { key "3";  action workspace switch "3:*" }
+  bind { key "4";  action workspace switch "4:*" }
+  bind { key "5";  action workspace switch "5:*" }
+  bind { key "6";  action workspace switch "6:*" }
+  bind { key "7";  action workspace switch "7:*" }
+  bind { key "8";  action workspace switch "8:*" }
+  bind { key "9";  action workspace switch "9:*" }
+  bind { key "0";  action workspace switch "10:*" }
+
+  // Move focused window to workspace
+  bind { mods ["SHIFT"]; key "1";  action workspace move-focused "1:*" }
+  bind { mods ["SHIFT"]; key "2";  action workspace move-focused "2:*" }
+  bind { mods ["SHIFT"]; key "3";  action workspace move-focused "3:*" }
+  bind { mods ["SHIFT"]; key "4";  action workspace move-focused "4:*" }
+  bind { mods ["SHIFT"]; key "5";  action workspace move-focused "5:*" }
+  bind { mods ["SHIFT"]; key "6";  action workspace move-focused "6:*" }
+  bind { mods ["SHIFT"]; key "7";  action workspace move-focused "7:*" }
+  bind { mods ["SHIFT"]; key "8";  action workspace move-focused "8:*" }
+  bind { mods ["SHIFT"]; key "9";  action workspace move-focused "9:*" }
+  bind { mods ["SHIFT"]; key "0";  action workspace move-focused "10:*" }
+
+  // Utility
+  bind { key "Q"; action close-focused }
+  bind { key "E"; action spawn "nemo" }
+  bind { key "P"; action spawn "grimblast --notify copy area" }
+  bind { key "Escape"; action spawn "wlogout -p layer-shell" }
+}
+
+// ----------------------------
+// Autostart (swww, bar, notifications)
+// ----------------------------
+autostart {
+  // If you have an NVIDIA GTX 970 and see cursor glitches, consider:
+  // "env WLR_NO_HARDWARE_CURSORS=1 swww init"
+
+  // swww daemon + wallpaper with wave transition
+  "swww init"
+  "swww img ~/Pictures/wallpapers/muted-space-1920x1080.png \
+     --transition-type wave \
+     --transition-angle 45 \
+     --transition-step 90 \
+     --transition-fps 60 \
+     --transition-duration 2"
+
+  // Waybar (theme files already created)
+  "waybar"
+
+  // Clipboard + notifications (themed mako)
+  "wl-paste --type text --watch clipman store"
+  "mako"
+
+  // Optional: keep wofi ready in memory (some setups pre-warm, most skip)
+  // "wofi --show drun"
+}
+
+// ----------------------------
+// Desktop theme hints (non-binding; for reference)
+// ----------------------------
+// Icons: Papirus-MutedRetroSpace-Apps  (inherits Papirus-MutedRetroSpace → Papirus-Dark)
+// GTK:   MutedRetroSpace               (user theme overrides; GTK4 respects dark mode + accents)
+// Cursor: MutedRetroSpace-Cursor       (apply via: gsettings set org.gnome.desktop.interface cursor-theme 'MutedRetroSpace-Cursor')
