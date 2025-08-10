@@ -1,0 +1,143 @@
+
+# beeai_shortcut_config.yaml
+# BeeAI ⇄ Shortcut bootstrap configuration
+#
+# How to use:
+#   1) Set env var:  SHORTCUT_TOKEN=<your token>
+#   2) Run:          python shortcut_client.py --config beeai_shortcut_config.yaml bootstrap
+#
+# Notes:
+# - external_id values make every call idempotent (safe to re-run).
+# - Edit names/labels/AC to fit your project before running.
+
+org:
+  timezone: "America/Chicago"
+  iteration_length_days: 7
+
+projects:
+  - name: "Data Pipeline"
+    description: "ETL/ELT pipeline work"
+    external_id: "beeai:project:data-pipeline"
+  - name: "Modeling"
+    description: "ML modeling, training, evaluation"
+    external_id: "beeai:project:modeling"
+  - name: "Dashboards"
+    description: "BI dashboards and UX"
+    external_id: "beeai:project:dashboards"
+  - name: "Platform"
+    description: "Infra, tooling, registries, observability"
+    external_id: "beeai:project:platform"
+  - name: "QA/Validation"
+    description: "Testing, validation, governance"
+    external_id: "beeai:project:qa-validation"
+
+labels:
+  # Namespaced label catalog (no API call required to pre-create; used when attaching to entities)
+  area: ["pipeline","model","viz","platform","qa","ops"]
+  comp: ["ingest","transform","feature-store","training","eval","serving","dash"]
+  risk: ["high","medium","low"]
+  owner: ["po","tl","ds1","ds2","mle","de","sdet"]
+  data: ["pii","pci","public","confidential"]
+  ml: ["offline","batch","realtime","ab-test"]
+  infra: ["duckdb","postgres","minio","dbt","spark","great-expectations","fastapi"]
+  lifecycle: ["backlog","ready","progress","review","blocked","done"]
+
+workflow_states:
+  # You should map these names to your actual Shortcut workflow_state_ids after first run if needed.
+  # The client will attempt to best-match by name; otherwise it leaves default state.
+  - "Backlog"
+  - "Ready"
+  - "In Progress"
+  - "In Review"
+  - "Blocked"
+  - "Done"
+
+milestone:
+  name: "M01: MVP"
+  description: "MVP delivering ingestion→model→dashboards"
+  state: "to_do"
+  external_id: "beeai:milestone:m01-mvp"
+
+epics:
+  - name: "E01: Data Pipeline"
+    description: "Source→Bronze→Silver; contracts & quality gates"
+    labels: ["area:pipeline","comp:ingest","owner:de","risk:medium"]
+    external_id: "beeai:epic:m01-mvp:e01-data-pipeline"
+  - name: "E02: Model Training & MLOps"
+    description: "Training, eval, registry, release process"
+    labels: ["area:model","comp:training","owner:ds1","risk:medium"]
+    external_id: "beeai:epic:m01-mvp:e02-model-training-mlops"
+  - name: "E03: Evaluation & Monitoring"
+    description: "Metrics, drift, alerting, dashboards"
+    labels: ["area:model","comp:eval","owner:mle","risk:medium"]
+    external_id: "beeai:epic:m01-mvp:e03-eval-monitoring"
+  - name: "E04: Dashboard v1"
+    description: "Stakeholder KPIs and model insights"
+    labels: ["area:viz","comp:dash","owner:ds2","risk:low"]
+    external_id: "beeai:epic:m01-mvp:e04-dashboard-v1"
+
+iteration:
+  # The client can auto-calc dates for the current ISO week if start/end omitted.
+  name: "S2025W33: Data Quality"
+  start_date: ""   # e.g., "2025-08-11"; leave blank to auto-calc (Mon–Sun) using timezone above
+  end_date: ""     # e.g., "2025-08-17"
+  external_id: "beeai:iteration:2025w33"
+
+stories:
+  # Each story maps to a project and epic by name; client resolves IDs.
+  - name: "[Feature] Load raw_transactions to Bronze — schema & null checks"
+    description: |
+      AC:
+      - Create source→bronze mapping (YAML)
+      - Implement reader (chunked), write parquet (lz4, partition by txn_date)
+      - Great Expectations: 95% column coverage; null rate alerts > threshold
+      - Emit row counts & lag metrics to observability
+      DoR: Spec + source schema attached
+      DoD: PR merged; tests ≥ 80%; dashboard freshness tile updated
+    story_type: "feature"
+    project: "Data Pipeline"
+    epic: "E01: Data Pipeline"
+    estimate: 2
+    labels: ["area:pipeline","comp:ingest","owner:de","lifecycle:ready"]
+    external_id: "beeai:story:m01-mvp:e01-data-pipeline:load-raw-transactions"
+    tasks:
+      - "Create source-to-bronze mapping YAML"
+      - "Implement chunked reader; write lz4 parquet partitioned by txn_date"
+      - "Author GE suite; add CI step"
+      - "Emit row counts & lag metrics"
+  - name: "[Feature] Train XGBoost v0.1 — baseline"
+    description: |
+      AC:
+      - Feature view spec; split strategy; seed fixed
+      - Metrics: AUROC, AUPRC, KS; report saved to artifacts
+      - Model + params logged to registry; reproducible run script
+      DoR: Clean feature set; target leakage check documented
+      DoD: PR merged; model card published; evaluation dashboard refreshed
+    story_type: "feature"
+    project: "Modeling"
+    epic: "E02: Model Training & MLOps"
+    estimate: 3
+    labels: ["area:model","comp:training","owner:ds1","lifecycle:ready"]
+    external_id: "beeai:story:m01-mvp:e02-model-training-mlops:train-xgboost-v0-1"
+    tasks:
+      - "Define feature view & split strategy"
+      - "Train baseline; log metrics (AUROC, AUPRC, KS)"
+      - "Log model+params to registry"
+      - "Write model card v0.1"
+  - name: "[Feature] Churn Risk dashboard — v1 tiles"
+    description: |
+      AC:
+      - Tiles: volume, freshness, churn-rate, top drivers
+      - SLO: load < 2s, last refresh < 2h
+      - Access: RBAC set for stakeholders
+      DoD: UX review by PO; visual QA by SDET
+    story_type: "feature"
+    project: "Dashboards"
+    epic: "E04: Dashboard v1"
+    estimate: 2
+    labels: ["area:viz","comp:dash","owner:ds2","lifecycle:ready"]
+    external_id: "beeai:story:m01-mvp:e04-dashboard-v1:churn-risk-dashboard-v1"
+    tasks:
+      - "Create base tiles and layout"
+      - "Wire data refresh & freshness indicator"
+      - "Set RBAC and share with stakeholders"
