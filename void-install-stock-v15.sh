@@ -33,9 +33,9 @@ trap 'echo "ERROR on line $LINENO: $BASH_COMMAND"; (dmesg | tail -n 50) 2>/dev/n
 ### ────────────────────────────── User Variables ──────────────────────────────
 : "${DISK:=/dev/nvme0n1}"          # Target disk (DESTROYED!)
 : "${ESP_SIZE:=1GiB}"              # EFI System Partition size
-: "${HOSTNAME:=voidbox}"
-: "${USERNAME:=derek}"
-: "${REALNAME:=Derek}"
+: "${HOSTNAME:=blazar}"
+: "${USERNAME:=dscv}"
+: "${REALNAME:=Derek Vitrano}"
 : "${TIMEZONE:=America/Chicago}"
 : "${LOCALE:=en_US.UTF-8}"
 : "${KEYMAP:=us}"
